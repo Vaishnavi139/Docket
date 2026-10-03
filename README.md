@@ -1,6 +1,6 @@
 # Docket
 
-A search assistant for regulatory reporting. Find reports, dashboards, and documents in one search, ask questions about how reporting works, and draft new dashboards and policy docs from a sentence.
+An AI assistant for regulatory reporting. Find reports, dashboards, and documents in one search, ask questions about how reporting works, and draft new dashboards and policy docs from a sentence.
 
 HTML · CSS · JAVASCRIPT
 
