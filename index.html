@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Docket: ask anything about regulatory reporting</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="app">
+  <aside class="side" aria-label="Sidebar">
+    <div class="brand" id="brandSide"></div>
+    <button class="newbtn" id="newSide"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 3v10M3 8h10"/></svg>New search</button>
+    <nav class="nav" aria-label="Views">
+      <button class="navitem" data-view="ask" aria-current="page"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M3 5.5A2.5 2.5 0 0 1 5.5 3h9A2.5 2.5 0 0 1 17 5.5v6a2.5 2.5 0 0 1-2.5 2.5H9l-4 3v-3A2.5 2.5 0 0 1 3 11.5z"/></svg>Ask</button>
+      <button class="navitem" data-view="saved"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M5 3h10v14l-5-3.5L5 17z"/></svg>Saved<span class="n" id="savedCount">0</span></button>
+      <button class="navitem" data-view="library"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M3 6a2 2 0 0 1 2-2h3l2 2h5a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>Library<span class="n" id="libCount">0</span></button>
+      <button class="navitem" data-view="insights"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 16V9M10 16V4M16 16v-5"/></svg>Insights</button>
+    </nav>
+    <div>
+      <p class="sidehead">Browse the catalog</p>
+      <div class="browse" id="browse"></div>
+    </div>
+    <div class="sidefoot">
+      <label class="switch"><input type="checkbox" id="howToggle"><span class="track"></span><span>Always show how answers are found</span></label>
+      <button class="themebtn" data-tour><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="8" cy="8" r="6"/><path d="M6.4 6.2a1.7 1.7 0 1 1 2.4 1.6c-.5.3-.8.6-.8 1.2M8 11.2v.1"/></svg>How Docket works</button>
+      <button class="themebtn" data-theme-toggle><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="8" cy="8" r="6"/><path d="M8 2a6 6 0 0 0 0 12z" fill="currentColor"/></svg>Switch theme</button>
+      <div class="note">Prototype</div>
+    </div>
+  </aside>
+
+  <header class="topbar">
+    <div class="brand" id="brandTop"></div>
+    <span class="sp"></span>
+    <button class="iconbtn" id="newTop" aria-label="New search"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 3v10M3 8h10"/></svg></button>
+    <button class="iconbtn" data-tour aria-label="How Docket works"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="8" cy="8" r="6"/><path d="M6.4 6.2a1.7 1.7 0 1 1 2.4 1.6c-.5.3-.8.6-.8 1.2M8 11.2v.1"/></svg></button>
+    <button class="iconbtn" data-theme-toggle aria-label="Switch theme"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="8" cy="8" r="6"/><path d="M8 2a6 6 0 0 0 0 12z" fill="currentColor"/></svg></button>
+  </header>
+  <nav class="tabs" aria-label="Views">
+    <button data-view="ask" aria-current="page">Ask</button>
+    <button data-view="saved">Saved</button>
+    <button data-view="library">Library</button>
+    <button data-view="insights">Insights</button>
+  </nav>
+
+  <div class="main">
+    <div class="demobar" id="demoBar" hidden><span>Demo running. Watch a question become an answer, a dashboard, and a document.</span><button id="stopDemo">Stop demo</button></div>
+    <main class="thread" id="thread" aria-live="polite">
+      <div class="inner" id="inner"></div>
+      <div class="inner" id="viewSaved" hidden></div>
+      <div class="inner" id="viewLibrary" hidden></div>
+      <div class="inner" id="viewInsights" hidden></div>
+    </main>
+
+    <div class="composer">
+      <div class="boxwrap">
+        <ul class="ta" id="ta" role="listbox" aria-label="Suggestions" hidden></ul>
+        <form class="box" id="form" autocomplete="off">
+          <button class="attach" type="button" data-upload aria-label="Upload a document"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 9.5l-6 6a4 4 0 0 1-5.7-5.7l6.4-6.4a2.7 2.7 0 0 1 3.8 3.8l-6.4 6.4a1.3 1.3 0 0 1-1.9-1.9l5.7-5.7"/></svg></button>
+          <input id="q" type="text" enterkeyhint="search" role="combobox" aria-expanded="false" aria-controls="ta" placeholder="Ask anything, find a report, or create a dashboard or document" aria-label="Ask Docket">
+          <span class="kbd" aria-hidden="true">/</span>
+          <button class="send" type="submit" aria-label="Send"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 16V4M5 9l5-5 5 5"/></svg></button>
+        </form>
+      </div>
+      <div class="modes" role="group" aria-label="Start with"><span>Start with</span><button type="button" data-mode="Show me ">Find</button><button type="button" data-mode="What is ">Ask</button><button type="button" data-mode="Create a ">Create</button><button type="button" data-upload>Upload</button></div>
+      <div class="fine" id="fine"></div>
+    </div>
+  </div>
+</div>
+
+<dialog id="tour" aria-labelledby="tourTitle">
+  <div class="tin">
+    <div class="tart" id="tourArt"></div>
+    <h2 id="tourTitle"></h2>
+    <p id="tourText"></p>
+    <div class="tnav" id="tourDots"></div>
+    <div class="tnav">
+      <div class="tact">
+        <button class="btn ghost" id="tourBack">Back</button>
+        <button class="btn open" id="tourNext">Next</button>
+      </div>
+    </div>
+  </div>
+</dialog>
+<dialog id="viewer" aria-label="Preview"><div class="vin"><div class="vtop"><button class="btn ghost" id="vclose">Close</button></div><div id="vbody"></div></div></dialog>
+<input type="file" id="file" multiple hidden accept=".txt,.md,.csv,.json,.html,.htm,.docx,.xlsx,.xls,.pdf">
+<div class="dropov" id="dropov" hidden>Drop to add to Docket</div>
+<div class="toast" id="toast" role="status"></div>
+
+<script src="app.js"></script>>
+</body>
+</html>
